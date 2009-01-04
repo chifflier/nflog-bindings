@@ -1,0 +1,151 @@
+#include <arpa/inet.h>
+#include <linux/netfilter.h>
+#include <linux/ip.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "nflog.h"
+#include "nflog_common.h"
+
+#include "nflog_version.h"
+
+const char * log_bindings_version(void)
+{
+	return NFLOG_BINDINGS_VERSION;
+}
+
+int log_open(struct log *self)
+{
+	self->_h = nflog_open();
+	self->_gh = NULL;
+	return (self->_h != NULL);
+}
+
+void log_close(struct log *self)
+{
+	nflog_close(self->_h);
+	self->_gh = NULL;
+	self->_h = NULL;
+	self->_cb = NULL;
+}
+
+int log_bind(struct log *self)
+{
+	if (nflog_bind_pf(self->_h, AF_INET)) {
+		raise_swig_error("error during nflog_bind_pf()"); 
+		return -1;
+	}
+	return 0;
+}
+
+int log_unbind(struct log *self)
+{
+	if (nflog_unbind_pf(self->_h, AF_INET)) {
+		raise_swig_error("error during nflog_unbind_pf()"); 
+		return -1;
+	}
+	return 0;
+}
+
+int log_create_queue(struct log *self, int queue_num)
+{
+	int ret;
+
+	if (self->_cb == NULL) {
+		raise_swig_error("Error: no callback set"); 
+		return -1;
+	}
+
+	self->_gh = nflog_bind_group(self->_h, queue_num);
+	if (self->_gh == NULL) {
+		raise_swig_error("error during nflog_bind_group()"); 
+		return -1;
+	}
+
+	ret = nflog_callback_register(self->_gh, &swig_nflog_callback, (void*)self->_cb);
+	if (ret != 0) {
+		raise_swig_error("error during nflog_callback_register()"); 
+		return -1;
+	}
+
+	return 0;
+}
+
+int log_fast_open(struct log *self, int queue_num)
+{
+	int ret;
+
+	if (self->_cb == NULL) {
+		raise_swig_error("Error: no callback set"); 
+		return -1;
+	}
+
+	ret = log_open(self);
+	if (!ret)
+		return -1;
+
+	log_unbind(self);
+	ret = log_bind(self);
+	if (ret < 0) {
+		log_close(self);
+		return -1;
+	}
+
+	ret = log_create_queue(self,queue_num);
+	if (ret < 0) {
+		log_unbind(self);
+		log_close(self);
+		return -1;
+	}
+
+	return 0;
+}
+
+int log_set_bufsiz(struct log *self, int bufsz)
+{
+	int ret;
+	ret = nflog_set_nlbufsiz(self->_gh, bufsz);
+	if (ret < 0) {
+		raise_swig_error("error during nflog_set_nlbufsiz()\n");
+	}
+	return ret;
+}
+
+int log_try_run(struct log *self)
+{
+	int fd;
+	int rv;
+	char buf[4096];
+
+	printf("setting copy_packet mode\n");
+	if (nflog_set_mode(self->_gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
+		raise_swig_error("can't set packet_copy mode\n");
+		exit(1);
+	}
+
+	fd = nflog_fd(self->_h);
+
+	while ((rv = recv(fd, buf, sizeof(buf), 0)) && rv >= 0) {
+		nflog_handle_packet(self->_h, buf, rv);
+	}
+
+	printf("exiting try_run\n");
+	return 0;
+}
+
+int log_payload_get_nfmark(struct log_payload *self)
+{
+	return nflog_get_nfmark(self->nfad);
+}
+
+int log_payload_get_indev(struct log_payload *self)
+{
+	return nflog_get_indev(self->nfad);
+}
+
+int log_payload_get_outdev(struct log_payload *self)
+{
+	return nflog_get_outdev(self->nfad);
+}
+
