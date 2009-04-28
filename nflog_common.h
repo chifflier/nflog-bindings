@@ -12,15 +12,15 @@ int log_open(struct log *self);
 
 void log_close(struct log *self);
 
-int log_bind(struct log *self);
+int log_bind(struct log *self, int af_family);
 
-int log_unbind(struct log *self);
+int log_unbind(struct log *self, int af_family);
 
 int log_set_bufsiz(struct log *self, int maxlen);
 
 int log_create_queue(struct log *self, int queue_num);
 
-int log_fast_open(struct log *self, int queue_num);
+int log_fast_open(struct log *self, int queue_num, int af_family);
 
 int log_try_run(struct log *self);
 

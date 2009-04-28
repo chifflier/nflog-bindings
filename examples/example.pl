@@ -14,13 +14,14 @@ use nflog;
 
 use NetPacket::IP qw(IP_PROTO_TCP);
 use NetPacket::TCP;
+use Socket qw(AF_INET AF_INET6);
 
 my $l;
 
 sub cleanup()
 {
 	print "unbind\n";
-	$l->unbind();
+	$l->unbind(AF_INET);
 	print "close\n";
 	$l->close();
 }
@@ -56,7 +57,7 @@ $l = new nflog::log();
 print "open\n";
 $l->open();
 print "bind\n";
-$l->bind();
+$l->bind(AF_INET);
 
 $SIG{INT} = "cleanup";
 

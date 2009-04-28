@@ -30,18 +30,18 @@ void log_close(struct log *self)
 	self->_cb = NULL;
 }
 
-int log_bind(struct log *self)
+int log_bind(struct log *self, int af_family)
 {
-	if (nflog_bind_pf(self->_h, AF_INET)) {
+	if (nflog_bind_pf(self->_h, af_family)) {
 		raise_swig_error("error during nflog_bind_pf()"); 
 		return -1;
 	}
 	return 0;
 }
 
-int log_unbind(struct log *self)
+int log_unbind(struct log *self, int af_family)
 {
-	if (nflog_unbind_pf(self->_h, AF_INET)) {
+	if (nflog_unbind_pf(self->_h, af_family)) {
 		raise_swig_error("error during nflog_unbind_pf()"); 
 		return -1;
 	}
@@ -72,7 +72,7 @@ int log_create_queue(struct log *self, int queue_num)
 	return 0;
 }
 
-int log_fast_open(struct log *self, int queue_num)
+int log_fast_open(struct log *self, int queue_num, int af_family)
 {
 	int ret;
 
@@ -85,8 +85,8 @@ int log_fast_open(struct log *self, int queue_num)
 	if (!ret)
 		return -1;
 
-	log_unbind(self);
-	ret = log_bind(self);
+	log_unbind(self, af_family);
+	ret = log_bind(self, af_family);
 	if (ret < 0) {
 		log_close(self);
 		return -1;
@@ -94,7 +94,7 @@ int log_fast_open(struct log *self, int queue_num)
 
 	ret = log_create_queue(self,queue_num);
 	if (ret < 0) {
-		log_unbind(self);
+		log_unbind(self, af_family);
 		log_close(self);
 		return -1;
 	}

@@ -25,10 +25,10 @@
 
         int open();
         void close();
-        int bind();
-        int unbind();
+        int bind(int);
+        int unbind(int);
         int create_queue(int);
-        int fast_open(int);
+        int fast_open(int, int);
         int set_bufsiz(int);
         int try_run();
 };

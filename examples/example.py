@@ -37,7 +37,7 @@ print "open"
 l.open()
 
 print "bind"
-l.bind();
+l.bind(AF_INET);
 
 #print "setting callback (should fail, wrong arg type)"
 #try:
@@ -59,7 +59,7 @@ except KeyboardInterrupt, e:
 
 
 print "unbind"
-l.unbind()
+l.unbind(AF_INET)
 
 print "close"
 l.close()
