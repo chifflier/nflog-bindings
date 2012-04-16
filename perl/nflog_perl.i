@@ -60,7 +60,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 
                 PUSHMARK(SP) ;
 
-                XPUSHs(sv_2mortal(newSViv(42)));
                 p = malloc(sizeof(struct log_payload));
                 p->data = payload_data;
                 p->len = payload_len;

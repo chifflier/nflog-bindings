@@ -15,8 +15,8 @@ import nflog
 sys.path.append('dpkt-1.6')
 from dpkt import ip
 
-def cb(i,payload):
-	print "python callback called !", i
+def cb(payload):
+	print "python callback called !"
 
 	print "payload len ", payload.get_length()
 	data = payload.get_data()
@@ -33,23 +33,11 @@ def cb(i,payload):
 
 l = nflog.log()
 
-print "open"
-l.open()
-
-print "bind"
-l.bind(AF_INET);
-
-#print "setting callback (should fail, wrong arg type)"
-#try:
-#	q.set_callback("blah")
-#except TypeError, e:
-#	print "type failure (expected), continuing"
-
 print "setting callback"
 l.set_callback(cb)
 
-print "creating queue"
-l.create_queue(1)
+print "open"
+l.fast_open(1, AF_INET)
 
 print "trying to run"
 try:

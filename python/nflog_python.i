@@ -58,12 +58,9 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 p->id = id;
                 p->gh = gh;
                 p->nfad = nfad;
-                payload_obj = SWIG_NewPointerObj((void*) p, SWIGTYPE_p_log_payload, 1);
-                arglist = Py_BuildValue("(i,O)",42,payload_obj);
-                /*printf("will call python object\n");*/
+                payload_obj = SWIG_NewPointerObj((void*) p, SWIGTYPE_p_log_payload, 0 /* | SWIG_POINTER_OWN */);
+                arglist = Py_BuildValue("(N)",payload_obj);
                 result = PyEval_CallObject(func,arglist);
-                /*printf("result: %p\n", result);*/
-                free(p);
                 Py_DECREF(arglist);
                 if (result) {
                         Py_DECREF(result);

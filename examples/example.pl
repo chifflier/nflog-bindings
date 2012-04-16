@@ -28,9 +28,8 @@ sub cleanup()
 
 sub cb()
 {
-	my ($dummy,$payload) = @_;
+	my ($payload) = @_;
 	print "Perl callback called!\n";
-	print "dummy is $dummy\n" if $dummy;
 	if ($payload) {
 		print "len: " . $payload->get_length() . "\n";
 
@@ -54,21 +53,13 @@ sub cb()
 
 $l = new nflog::log();
 
-print "open\n";
-$l->open();
-print "bind\n";
-$l->bind(AF_INET);
-
 $SIG{INT} = "cleanup";
-
-#print "set callback, wrong argument type (should fail)\n";
-#$q->set_callback("blah");
 
 print "setting callback\n";
 $l->set_callback(\&cb);
 
-print "creating queue\n";
-$l->create_queue(1);
+print "open\n";
+$l->fast_open(1, AF_INET);
 
 print "trying to run\n";
 $l->try_run();
