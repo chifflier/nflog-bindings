@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(${LIBNFLOG_INCLUDE_DIR})
 SET(SOURCES ../nflog.c ../nflog_common.c ../nflog_utils.c)
 SET(CMAKE_SWIG_FLAGS "")
 
-SWIG_ADD_MODULE(nflog python nflog.i ${SOURCES})
+SWIG_ADD_MODULE(nflog python ../libnetfilter_log.i ${SOURCES})
 SWIG_LINK_LIBRARIES(nflog ${PYTHON_LIBRARIES} ${LIBNFLOG_LINK_FLAGS})
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/nflog.py

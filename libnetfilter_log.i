@@ -13,11 +13,11 @@
 
 #if defined(SWIGPYTHON)
 
-%include nflog_python.i
+%include python/nflog_python.i
 
 #elif defined(SWIGPERL)
 
-%include nflog_perl.i
+%include perl/nflog_perl.i
 
 #endif
 
