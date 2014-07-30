@@ -116,7 +116,7 @@ int log_try_run(struct log *self)
 {
 	int fd;
 	int rv;
-	char buf[4096];
+	char buf[65535];
 
 	printf("setting copy_packet mode\n");
 	if (nflog_set_mode(self->_gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
