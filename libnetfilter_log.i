@@ -4,6 +4,8 @@
 #include <nflog.h>
 
 #include <nflog_common.h>
+
+#include <exception.h>
 %}
 
 %include exception.i
@@ -21,7 +23,17 @@
 
 #endif
 
+
 %extend log {
+
+%exception {
+        char *err;
+        clear_exception();
+        $action
+        if ((err = check_exception())) {
+                SWIG_exception(SWIG_RuntimeError, err);
+        }
+}
 
         int open();
         void close();

@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "exception.h"
+
 #include "nflog.h"
 #include "nflog_common.h"
 
@@ -33,7 +35,7 @@ void log_close(struct log *self)
 int log_bind(struct log *self, int af_family)
 {
 	if (nflog_bind_pf(self->_h, af_family)) {
-		raise_swig_error("error during nflog_bind_pf()"); 
+		throw_exception("error during nflog_bind_pf()");
 		return -1;
 	}
 	return 0;
@@ -42,7 +44,7 @@ int log_bind(struct log *self, int af_family)
 int log_unbind(struct log *self, int af_family)
 {
 	if (nflog_unbind_pf(self->_h, af_family)) {
-		raise_swig_error("error during nflog_unbind_pf()"); 
+		throw_exception("error during nflog_unbind_pf()");
 		return -1;
 	}
 	return 0;
@@ -53,19 +55,19 @@ int log_create_queue(struct log *self, int queue_num)
 	int ret;
 
 	if (self->_cb == NULL) {
-		raise_swig_error("Error: no callback set"); 
+		throw_exception("Error: no callback set");
 		return -1;
 	}
 
 	self->_gh = nflog_bind_group(self->_h, queue_num);
 	if (self->_gh == NULL) {
-		raise_swig_error("error during nflog_bind_group()"); 
+		throw_exception("error during nflog_bind_group()");
 		return -1;
 	}
 
 	ret = nflog_callback_register(self->_gh, &swig_nflog_callback, (void*)self->_cb);
 	if (ret != 0) {
-		raise_swig_error("error during nflog_callback_register()"); 
+		throw_exception("error during nflog_callback_register()");
 		return -1;
 	}
 
@@ -77,7 +79,7 @@ int log_fast_open(struct log *self, int queue_num, int af_family)
 	int ret;
 
 	if (self->_cb == NULL) {
-		raise_swig_error("Error: no callback set"); 
+		throw_exception("Error: no callback set");
 		return -1;
 	}
 
@@ -107,7 +109,7 @@ int log_set_bufsiz(struct log *self, int bufsz)
 	int ret;
 	ret = nflog_set_nlbufsiz(self->_gh, bufsz);
 	if (ret < 0) {
-		raise_swig_error("error during nflog_set_nlbufsiz()\n");
+		throw_exception("error during nflog_set_nlbufsiz()\n");
 	}
 	return ret;
 }
@@ -118,9 +120,8 @@ int log_try_run(struct log *self)
 	int rv;
 	char buf[65535];
 
-	printf("setting copy_packet mode\n");
 	if (nflog_set_mode(self->_gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
-		raise_swig_error("can't set packet_copy mode\n");
+		throw_exception("can't set packet_copy mode\n");
 		exit(1);
 	}
 
@@ -130,7 +131,6 @@ int log_try_run(struct log *self)
 		nflog_handle_packet(self->_h, buf, rv);
 	}
 
-	printf("exiting try_run\n");
 	return 0;
 }
 

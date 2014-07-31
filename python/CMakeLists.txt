@@ -12,7 +12,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 INCLUDE_DIRECTORIES(${LIBNFLOG_INCLUDE_DIR})
 
-SET(SOURCES ../nflog.c ../nflog_common.c ../nflog_utils.c)
+SET(SOURCES ../nflog.c ../nflog_common.c ../nflog_utils.c ../exception.c)
 SET(CMAKE_SWIG_FLAGS "")
 
 SWIG_ADD_MODULE(nflog python ../libnetfilter_log.i ${SOURCES})

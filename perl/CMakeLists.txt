@@ -1,4 +1,4 @@
-SET(SOURCES ../nflog.c ../nflog_common.c ../nflog_utils.c)
+SET(SOURCES ../nflog.c ../nflog_common.c ../nflog_utils.c ../exception.c)
 
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 FIND_PACKAGE(Perl)

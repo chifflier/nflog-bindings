@@ -67,7 +67,7 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 }
                 result = PyErr_Occurred();
                 if (result) {
-                        printf("callback failure !\n");
+                        fprintf(stderr, "callback failure !\n");
                         PyErr_Print();
                 }
                 SWIG_PYTHON_THREAD_END_ALLOW;
