@@ -4,6 +4,8 @@
 #include <nflog.h>
 
 #include <nflog_common.h>
+
+#include <exception.h>
 %}
 
 %include exception.i
@@ -13,15 +15,25 @@
 
 #if defined(SWIGPYTHON)
 
-%include nflog_python.i
+%include python/nflog_python.i
 
 #elif defined(SWIGPERL)
 
-%include nflog_perl.i
+%include perl/nflog_perl.i
 
 #endif
 
+
 %extend log {
+
+%exception {
+        char *err;
+        clear_exception();
+        $action
+        if ((err = check_exception())) {
+                SWIG_exception(SWIG_RuntimeError, err);
+        }
+}
 
         int open();
         void close();
