@@ -148,4 +148,16 @@ int log_payload_get_outdev(struct log_payload *self)
 {
 	return nflog_get_outdev(self->nfad);
 }
+int log_payload_get_uid(struct log_payload *self)
+{
+        u_int32_t i;
+        nflog_get_uid(self->nfad, &i);
+        return (int)i;
+}
 
+int log_payload_get_gid(struct log_payload *self)
+{
+        u_int32_t i;
+        nflog_get_gid(self->nfad, &i);
+        return (int)i;
+}
