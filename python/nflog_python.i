@@ -23,7 +23,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
         int ret;
         char *payload_data;
         int payload_len;
-        struct timeval tv1, tv2, diff;
 
         if (data == NULL) {
                 fprintf(stderr,"No callback set !\n");
@@ -39,8 +38,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 
         ret = nflog_get_payload(nfad, &payload_data);
         payload_len = ret;
-
-        gettimeofday(&tv1, NULL);
 
         /*printf("callback called\n");
         printf("callback argument: %p\n",data);*/
@@ -72,13 +69,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 }
                 SWIG_PYTHON_THREAD_END_ALLOW;
         }
-
-        gettimeofday(&tv2, NULL);
-
-        timeval_subtract(&diff, &tv2, &tv1);
-        printf("python callback call: %d sec %d usec\n",
-                (int)diff.tv_sec,
-                (int)diff.tv_usec);
 
         return 0;
 }
