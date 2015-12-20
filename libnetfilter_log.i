@@ -49,6 +49,8 @@
         int get_nfmark();
         int get_indev();
         int get_outdev();
+        int get_uid();
+        int get_gid();
 
 unsigned int get_length(void) {
         return self->len;
