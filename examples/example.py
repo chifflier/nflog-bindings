@@ -15,23 +15,29 @@ import nflog
 sys.path.append('dpkt-1.6')
 from dpkt import ip
 
-def cb(payload):
-	print "python callback called !"
-
-	print "payload len ", payload.get_length()
-	data = payload.get_data()
-	pkt = ip.IP(data)
-	print "proto:", pkt.p
-	print "source: %s" % inet_ntoa(pkt.src)
-	print "dest: %s" % inet_ntoa(pkt.dst)
-	if pkt.p == ip.IP_PROTO_TCP:
-	 	print "  sport: %s" % pkt.tcp.sport
-	 	print "  dport: %s" % pkt.tcp.dport
-
-	sys.stdout.flush()
-	return 1
-
 l = nflog.log()
+
+def cb(payload):
+    try:
+        print "python callback called !"
+
+        print "payload len ", payload.get_length()
+        data = payload.get_data()
+        pkt = ip.IP(data)
+        print "proto:", pkt.p
+        print "source: %s" % inet_ntoa(pkt.src)
+        print "dest: %s" % inet_ntoa(pkt.dst)
+        if pkt.p == ip.IP_PROTO_TCP:
+            print "  sport: %s" % pkt.tcp.sport
+            print "  dport: %s" % pkt.tcp.dport
+
+        sys.stdout.flush()
+        return 1
+    except KeyboardInterrupt:
+        print "interrupted in callback"
+        global l
+        print "stop the loop"
+        l.stop_loop()
 
 print "setting callback"
 l.set_callback(cb)
@@ -39,11 +45,14 @@ l.set_callback(cb)
 print "open"
 l.fast_open(1, AF_INET)
 
-print "trying to run"
+print "prepare"
+l.prepare()
+
+print "loop nflog device until SIGINT"
 try:
-	l.try_run()
+    l.loop()
 except KeyboardInterrupt, e:
-	print "interrupted"
+	print "loop() was interrupted"
 
 
 print "unbind"

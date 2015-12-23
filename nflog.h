@@ -10,6 +10,7 @@ struct log {
 
 	struct nflog_handle *_h;
 	struct nflog_g_handle *_gh;
+	int fd;
 	void *_cb;
 };
 

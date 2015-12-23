@@ -42,7 +42,9 @@
         int create_queue(int);
         int fast_open(int, int);
         int set_bufsiz(int);
-        int try_run();
+        int prepare();
+        int loop();
+        int stop_loop();
 };
 
 %extend log_payload {

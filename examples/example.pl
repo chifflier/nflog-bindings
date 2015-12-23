@@ -62,6 +62,8 @@ print "open\n";
 $l->fast_open(1, AF_INET);
 
 print "trying to run\n";
-$l->try_run();
+$l->prepare();
 
+print "trying to run\n";
+$l->loop();
 
