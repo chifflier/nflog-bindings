@@ -50,6 +50,10 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 SWIG_PYTHON_THREAD_BEGIN_ALLOW;
                 func = (PyObject *) data;
                 p = malloc(sizeof(struct log_payload));
+                if (!p) {
+                        fprintf(stderr, "callback malloc failure !\n");
+                        PyErr_Print();
+                }
                 p->data = payload_data;
                 p->len = payload_len;
                 p->id = id;
@@ -58,6 +62,7 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 payload_obj = SWIG_NewPointerObj((void*) p, SWIGTYPE_p_log_payload, 0 /* | SWIG_POINTER_OWN */);
                 arglist = Py_BuildValue("(N)",payload_obj);
                 result = PyEval_CallObject(func,arglist);
+                free(p);
                 Py_DECREF(arglist);
                 if (result) {
                         Py_DECREF(result);
