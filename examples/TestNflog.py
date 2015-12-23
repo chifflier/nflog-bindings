@@ -1,9 +1,14 @@
 import os
 import pwd
 import grp
-import nflog
+import sys
 import time
 import socket
+
+sys.path.append('python')
+sys.path.append('build/python')
+
+import nflog
 
 
 # GLOBALS
