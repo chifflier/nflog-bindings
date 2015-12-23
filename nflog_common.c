@@ -1,5 +1,6 @@
 #include <arpa/inet.h>
 #include <linux/netfilter.h>
+#include <libnfnetlink/libnfnetlink.h>
 #include <linux/ip.h>
 
 #include <stdio.h>
@@ -114,21 +115,43 @@ int log_set_bufsiz(struct log *self, int bufsz)
 	return ret;
 }
 
-int log_try_run(struct log *self)
+int log_stop_loop(struct log *self)
 {
-	int fd;
+	self->fd = -1;
+
+	return 0;
+}
+
+int log_loop(struct log *self)
+{
 	int rv;
 	char buf[65535];
+
+	while ((rv = recv(self->fd, buf, sizeof(buf), 0)) && rv >= 0 && self->_h) {
+		nflog_handle_packet(self->_h, buf, rv);
+	}
+
+	return 0;
+}
+
+int log_prepare(struct log *self)
+{
+	int rv;
+	int opt = 1;
 
 	if (nflog_set_mode(self->_gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
 		throw_exception("can't set packet_copy mode\n");
 		exit(1);
 	}
 
-	fd = nflog_fd(self->_h);
+	self->fd = nflog_fd(self->_h);
 
-	while ((rv = recv(fd, buf, sizeof(buf), 0)) && rv >= 0) {
-		nflog_handle_packet(self->_h, buf, rv);
+	/* avoid ENOBUFS on read() operation, otherwise the while loop
+	* in log_loop() is interrupted. */
+	rv = setsockopt(self->fd, SOL_NETLINK, NETLINK_NO_ENOBUFS, &opt, sizeof(int));
+	if (rv == -1) {
+		throw_exception("can't set setsockopt(NETLINK_NO_ENOBUFS)");
+		exit(1);
 	}
 
 	return 0;
