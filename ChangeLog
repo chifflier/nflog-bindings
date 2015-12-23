@@ -1,0 +1,4 @@
+0.3 -- 2016-01
+
+PR#4: API change: try_run has been replaced by loop/stop_loop
+      This makes dropping privileges easier.
