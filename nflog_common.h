@@ -1,6 +1,10 @@
 #ifndef __NFLOG_COMMON__
 #define __NFLOG_COMMON__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern void raise_swig_error(const char *errstr);
 
 int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
@@ -33,5 +37,9 @@ int log_payload_get_nfmark(struct log_payload *self);
 int log_payload_get_indev(struct log_payload *self);
 
 int log_payload_get_outdev(struct log_payload *self);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __NFLOG_COMMON__ */
