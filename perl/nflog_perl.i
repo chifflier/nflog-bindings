@@ -24,7 +24,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 {
         int id = 0;
         struct nfulnl_msg_packet_hdr *ph;
-        int ret;
         char *payload_data;
         int payload_len;
         struct timeval tv1, tv2, diff;
@@ -41,10 +40,7 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
         }
         */
 
-        ret = nflog_get_payload(nfad, &payload_data);
-        payload_len = ret;
-
-        gettimeofday(&tv1, NULL);
+        payload_len = nflog_get_payload(nfad, &payload_data);
 
         /*printf("callback called\n");
         printf("callback argument: %p\n",data);*/
@@ -67,24 +63,16 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 p->gh = gh;
                 p->nfad = nfad;
                 payload_obj = sv_newmortal();
-                SWIG_MakePtr(payload_obj, (void*) p, SWIGTYPE_p_log_payload, 0);
+                SWIG_MakePtr(payload_obj, (void*) p, SWIGTYPE_p_log_payload, SWIG_POINTER_OWN);
                 XPUSHs(payload_obj);
 
                 PUTBACK;
 
                 call_sv(func, G_DISCARD);
-                free(p);
 
                 FREETMPS ;
                 LEAVE ;
         }
-
-        gettimeofday(&tv2, NULL);
-
-        timeval_subtract(&diff, &tv2, &tv1);
-        printf("perl callback call: %d sec %d usec\n",
-                (int)diff.tv_sec,
-                (int)diff.tv_usec);
 
         return 0;
 }

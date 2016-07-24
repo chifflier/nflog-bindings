@@ -20,7 +20,6 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 {
         int id = 0;
         struct nfulnl_msg_packet_hdr *ph;
-        int ret;
         char *payload_data;
         int payload_len;
 
@@ -36,8 +35,7 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
         }
         */
 
-        ret = nflog_get_payload(nfad, &payload_data);
-        payload_len = ret;
+        payload_len = nflog_get_payload(nfad, &payload_data);
 
         /*printf("callback called\n");
         printf("callback argument: %p\n",data);*/
@@ -59,10 +57,9 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
                 p->id = id;
                 p->gh = gh;
                 p->nfad = nfad;
-                payload_obj = SWIG_NewPointerObj((void*) p, SWIGTYPE_p_log_payload, 0 /* | SWIG_POINTER_OWN */);
+                payload_obj = SWIG_NewPointerObj((void*) p, SWIGTYPE_p_log_payload, SWIG_POINTER_OWN );
                 arglist = Py_BuildValue("(N)",payload_obj);
                 result = PyEval_CallObject(func,arglist);
-                free(p);
                 Py_DECREF(arglist);
                 if (result) {
                         Py_DECREF(result);
