@@ -1,5 +1,7 @@
 # nflog-bindings
 
+[![Build Status](https://travis-ci.org/chifflier/nflog-bindings.svg?branch=master)](https://travis-ci.org/chifflier/nflog-bindings)
+
 ## Overview
 
 nflog-bindings was written to provide an interface in high-level
