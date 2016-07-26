@@ -1,4 +1,7 @@
-0.3 -- 2016-01
-
-PR#4: API change: try_run has been replaced by loop/stop_loop
+nflog-bindings-0.3                                              2016-07-26
+  - Changes
+    - log_bindings_version() renamed to nflog_bindings_version()
+    - PR#4: API change: try_run has been replaced by loop/stop_loop
       This makes dropping privileges easier.
+  - Bugfixes
+    - fixed memory leaks in the payload object
