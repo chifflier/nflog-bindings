@@ -55,6 +55,7 @@
         int get_outdev();
         int get_uid();
         int get_gid();
+        const char * get_prefix();
 
 unsigned int get_length(void) {
         return self->len;

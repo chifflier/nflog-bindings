@@ -204,3 +204,8 @@ int log_payload_get_gid(struct log_payload *self)
         nflog_get_gid(self->nfad, &i);
         return (int)i;
 }
+
+const char * log_payload_get_prefix(struct log_payload *self)
+{
+	return nflog_get_prefix(self->nfad);
+}
