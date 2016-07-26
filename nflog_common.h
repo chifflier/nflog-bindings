@@ -48,6 +48,8 @@ int log_payload_get_gid(struct log_payload *self);
 
 const char * log_payload_get_prefix(struct log_payload *self);
 
+uint16_t log_payload_get_hwtype(struct log_payload *self);
+
 #ifdef __cplusplus
 }
 #endif

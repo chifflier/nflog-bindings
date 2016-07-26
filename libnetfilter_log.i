@@ -56,6 +56,7 @@
         int get_uid();
         int get_gid();
         const char * get_prefix();
+        uint16_t get_hwtype();
 
 unsigned int get_length(void) {
         return self->len;

@@ -209,3 +209,8 @@ const char * log_payload_get_prefix(struct log_payload *self)
 {
 	return nflog_get_prefix(self->nfad);
 }
+
+uint16_t log_payload_get_hwtype(struct log_payload *self)
+{
+	return nflog_get_hwtype(self->nfad);
+}

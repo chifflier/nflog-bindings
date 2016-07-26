@@ -95,12 +95,24 @@ int set_callback(PyObject *pyfunc)
 };
 
 %typemap (out) const char* get_data {
-        $result = PyString_FromStringAndSize($1,arg1->len); // blah
+        $result = PyString_FromStringAndSize($1,arg1->len);
+}
+
+%typemap (out) const char* get_hwhdr {
+        uint16_t hwhdr_len;
+        hwhdr_len = nflog_get_msg_packet_hwhdrlen(arg1->nfad);
+        $result = PyString_FromStringAndSize($1,hwhdr_len);
 }
 
 %extend log_payload {
 const char* get_data(void) {
         return self->data;
+}
+
+const char* get_hwhdr(void) {
+        const char *hwhdr;
+        hwhdr = nflog_get_msg_packet_hwhdr(self->nfad);
+        return hwhdr;
 }
 };
 

@@ -95,13 +95,26 @@ int set_callback(void *perl_cb)
 };
 
 %typemap (out) const char* get_data {
-        $result = sv_2mortal(newSVpvn($1,arg1->len)); // blah
+        $result = sv_2mortal(newSVpvn($1,arg1->len));
+        argvi++;
+}
+
+%typemap (out) const char* get_hwhdr {
+        uint16_t hwhdr_len;
+        hwhdr_len = nflog_get_msg_packet_hwhdrlen(arg1->nfad);
+        $result = sv_2mortal(newSVpvn($1,hwhdr_len));
         argvi++;
 }
 
 %extend log_payload {
 const char* get_data(void) {
         return self->data;
+}
+
+const char* get_hwhdr(void) {
+        const char *hwhdr;
+        hwhdr = nflog_get_msg_packet_hwhdr(self->nfad);
+        return hwhdr;
 }
 };
 
