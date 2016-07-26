@@ -64,5 +64,5 @@ unsigned int get_length(void) {
 
 %include "nflog.h"
 
-const char * log_bindings_version(void);
+const char * nflog_bindings_version(void);
 

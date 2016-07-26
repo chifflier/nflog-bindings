@@ -38,6 +38,10 @@ int log_payload_get_indev(struct log_payload *self);
 
 int log_payload_get_outdev(struct log_payload *self);
 
+int log_payload_get_uid(struct log_payload *self);
+
+int log_payload_get_gid(struct log_payload *self);
+
 #ifdef __cplusplus
 }
 #endif
