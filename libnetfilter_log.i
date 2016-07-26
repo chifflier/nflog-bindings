@@ -42,6 +42,8 @@
         int create_queue(int);
         int fast_open(int, int);
         int set_bufsiz(int);
+        int set_qthresh(uint32_t);
+        int set_timeout(uint32_t);
         int prepare();
         int loop();
         int stop_loop();

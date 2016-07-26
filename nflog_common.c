@@ -115,6 +115,26 @@ int log_set_bufsiz(struct log *self, int bufsz)
 	return ret;
 }
 
+int log_set_qthresh(struct log *self, uint32_t qthresh)
+{
+	int ret;
+	ret = nflog_set_qthresh(self->_gh, qthresh);
+	if (ret < 0) {
+		throw_exception("error during nflog_set_qthresh()\n");
+	}
+	return ret;
+}
+
+int log_set_timeout(struct log *self, uint32_t timeout)
+{
+	int ret;
+	ret = nflog_set_timeout(self->_gh, timeout);
+	if (ret < 0) {
+		throw_exception("error during nflog_set_timeout()\n");
+	}
+	return ret;
+}
+
 int log_stop_loop(struct log *self)
 {
 	self->fd = -1;

@@ -22,6 +22,10 @@ int log_unbind(struct log *self, int af_family);
 
 int log_set_bufsiz(struct log *self, int maxlen);
 
+int log_set_qthresh(struct log *self, uint32_t qthresh);
+
+int log_set_timeout(struct log *self, uint32_t timeout);
+
 int log_create_queue(struct log *self, int queue_num);
 
 int log_fast_open(struct log *self, int queue_num, int af_family);
