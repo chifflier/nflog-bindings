@@ -32,8 +32,6 @@ int log_fast_open(struct log *self, int queue_num, int af_family);
 
 int log_prepare(struct log *self);
 
-int log_loop(struct log *self);
-
 int log_stop_loop(struct log *self);
 
 int log_payload_get_nfmark(struct log_payload *self);

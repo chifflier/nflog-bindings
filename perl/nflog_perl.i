@@ -92,6 +92,17 @@ int set_callback(void *perl_cb)
         return 0;
 }
 
+int loop()
+{
+	int rv;
+	char buf[65535];
+
+	while ((rv = recv(self->fd, buf, sizeof(buf), 0)) && rv >= 0 && self->_h) {
+		nflog_handle_packet(self->_h, buf, rv);
+	}
+
+	return 0;
+}
 };
 
 %typemap (out) const char* get_data {

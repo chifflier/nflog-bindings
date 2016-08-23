@@ -92,6 +92,22 @@ int set_callback(PyObject *pyfunc)
         return 0;
 }
 
+int loop()
+{
+	int rv;
+	char buf[65535];
+
+	Py_BEGIN_ALLOW_THREADS
+	while ((rv = recv(self->fd, buf, sizeof(buf), 0)) && rv >= 0 && self->_h) {
+		Py_BLOCK_THREADS
+		nflog_handle_packet(self->_h, buf, rv);
+		Py_UNBLOCK_THREADS
+	}
+	Py_END_ALLOW_THREADS
+
+	return 0;
+}
+
 };
 
 %typemap (out) const char* get_data {
