@@ -135,6 +135,16 @@ int log_set_timeout(struct log *self, uint32_t timeout)
 	return ret;
 }
 
+int log_set_flags(struct log *self, enum CfgFlags flags)
+{
+	int ret;
+	ret = nflog_set_flags(self->_gh, flags);
+	if (ret < 0) {
+		throw_exception("error during nflog_set_flags()\n");
+	}
+	return ret;
+}
+
 int log_stop_loop(struct log *self)
 {
 	self->fd = -1;

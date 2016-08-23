@@ -10,6 +10,14 @@
 
 %include exception.i
 
+%apply unsigned int { uint32_t }
+%apply unsigned long long { uint64_t }
+
+
+enum CfgFlags {
+        CfgSeq,
+        CfgSeqGlobal,
+};
 
 
 
@@ -44,6 +52,7 @@
         int set_bufsiz(int);
         int set_qthresh(uint32_t);
         int set_timeout(uint32_t);
+        int set_flags(enum CfgFlags);
         int prepare();
         int loop();
         int stop_loop();
