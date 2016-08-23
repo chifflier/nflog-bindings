@@ -52,9 +52,13 @@
 %extend log_payload {
         int get_nfmark();
         int get_indev();
+        int get_physindev();
         int get_outdev();
-        int get_uid();
-        int get_gid();
+        int get_physoutdev();
+        uint32_t get_uid();
+        uint32_t get_gid();
+        uint32_t get_seq();
+        uint32_t get_seq_global();
         const char * get_prefix();
         uint16_t get_hwtype();
 

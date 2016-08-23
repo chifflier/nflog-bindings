@@ -39,12 +39,14 @@ int log_stop_loop(struct log *self);
 int log_payload_get_nfmark(struct log_payload *self);
 
 int log_payload_get_indev(struct log_payload *self);
-
+int log_payload_get_physindev(struct log_payload *self);
 int log_payload_get_outdev(struct log_payload *self);
+int log_payload_get_physoutdev(struct log_payload *self);
 
-int log_payload_get_uid(struct log_payload *self);
-
-int log_payload_get_gid(struct log_payload *self);
+uint32_t log_payload_get_uid(struct log_payload *self);
+uint32_t log_payload_get_gid(struct log_payload *self);
+uint32_t log_payload_get_seq(struct log_payload *self);
+uint32_t log_payload_get_seq_global(struct log_payload *self);
 
 const char * log_payload_get_prefix(struct log_payload *self);
 

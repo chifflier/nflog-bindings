@@ -187,22 +187,59 @@ int log_payload_get_indev(struct log_payload *self)
 	return nflog_get_indev(self->nfad);
 }
 
+int log_payload_get_physindev(struct log_payload *self)
+{
+	return nflog_get_physindev(self->nfad);
+}
+
 int log_payload_get_outdev(struct log_payload *self)
 {
 	return nflog_get_outdev(self->nfad);
 }
-int log_payload_get_uid(struct log_payload *self)
+
+int log_payload_get_physoutdev(struct log_payload *self)
 {
-        u_int32_t i;
-        nflog_get_uid(self->nfad, &i);
-        return (int)i;
+	return nflog_get_physoutdev(self->nfad);
 }
 
-int log_payload_get_gid(struct log_payload *self)
+uint32_t log_payload_get_uid(struct log_payload *self)
 {
-        u_int32_t i;
-        nflog_get_gid(self->nfad, &i);
-        return (int)i;
+	u_int32_t i;
+	if (nflog_get_uid(self->nfad, &i) < 0) {
+		throw_exception("No such attribute");
+		return (uint32_t)-1;
+	}
+	return i;
+}
+
+uint32_t log_payload_get_gid(struct log_payload *self)
+{
+	u_int32_t i;
+	if (nflog_get_gid(self->nfad, &i) < 0) {
+		throw_exception("No such attribute");
+		return (uint32_t)-1;
+	}
+	return i;
+}
+
+uint32_t log_payload_get_seq(struct log_payload *self)
+{
+	u_int32_t i;
+	if (nflog_get_seq(self->nfad, &i) < 0) {
+		throw_exception("No such attribute");
+		return (uint32_t)-1;
+	}
+	return i;
+}
+
+uint32_t log_payload_get_seq_global(struct log_payload *self)
+{
+	u_int32_t i;
+	if (nflog_get_seq_global(self->nfad, &i) < 0) {
+		throw_exception("No such attribute");
+		return (uint32_t)-1;
+	}
+	return i;
 }
 
 const char * log_payload_get_prefix(struct log_payload *self)
