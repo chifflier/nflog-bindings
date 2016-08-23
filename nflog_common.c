@@ -13,7 +13,7 @@
 
 #include "nflog_version.h"
 
-const char * log_bindings_version(void)
+const char * nflog_bindings_version(void)
 {
 	return NFLOG_BINDINGS_VERSION;
 }
