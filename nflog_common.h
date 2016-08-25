@@ -39,7 +39,7 @@ int log_prepare(struct log *self);
 int log_stop_loop(struct log *self);
 
 int log_payload_get_nfmark(struct log_payload *self);
-
+struct timeval log_payload_get_timestamp(struct log_payload *self);
 int log_payload_get_indev(struct log_payload *self);
 int log_payload_get_physindev(struct log_payload *self);
 int log_payload_get_outdev(struct log_payload *self);

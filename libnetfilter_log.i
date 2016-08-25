@@ -8,6 +8,7 @@
 #include <exception.h>
 %}
 
+%include timeval.i
 %include exception.i
 
 %apply unsigned int { uint32_t }
@@ -60,6 +61,7 @@ enum CfgFlags {
 
 %extend log_payload {
         int get_nfmark();
+        struct timeval get_timestamp();
         int get_indev();
         int get_physindev();
         int get_outdev();

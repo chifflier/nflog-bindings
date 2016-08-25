@@ -180,6 +180,16 @@ int log_payload_get_nfmark(struct log_payload *self)
 	return nflog_get_nfmark(self->nfad);
 }
 
+struct timeval log_payload_get_timestamp(struct log_payload *self)
+{
+	struct timeval tv = {0,0};
+	if (nflog_get_timestamp(self->nfad, &tv) < 0) {
+		throw_exception("No such attribute");
+		return tv;
+	}
+	return tv;
+}
+
 int log_payload_get_indev(struct log_payload *self)
 {
 	return nflog_get_indev(self->nfad);

@@ -4,7 +4,7 @@
 
 import struct
 import sys
-import time
+from datetime import datetime
 
 from socket import AF_INET, AF_INET6, inet_ntoa
 
@@ -23,14 +23,23 @@ def cb(payload):
         print "seq: [%d]" % payload.get_seq()
 
         print "  payload len ", payload.get_length()
+        try:
+            tv = payload.get_timestamp()
+            d = datetime.fromtimestamp(tv.tv_sec + (tv.tv_usec / 1000000.))
+            print "  timestamp: ", d
+        except RuntimeError, e:
+            #print e.args[0]
+            pass
         data = payload.get_data()
         pkt = ip.IP(data)
-        print "  proto:", pkt.p
-        print "  source: %s" % inet_ntoa(pkt.src)
-        print "  dest: %s" % inet_ntoa(pkt.dst)
-        if pkt.p == ip.IP_PROTO_TCP:
-            print "    sport: %s" % pkt.tcp.sport
-            print "    dport: %s" % pkt.tcp.dport
+        if pkt.p == ip.IP_PROTO_ICMP:
+            print "  ICMP:  %s > %s type %d code %d" % (inet_ntoa(pkt.src),inet_ntoa(pkt.dst),pkt.icmp.type,pkt.icmp.code)
+        elif pkt.p == ip.IP_PROTO_TCP:
+            print "  TCP:  %s:%d > %s:%d" % (inet_ntoa(pkt.src),pkt.tcp.sport,inet_ntoa(pkt.dst),pkt.tcp.dport)
+        elif pkt.p == ip.IP_PROTO_UDP:
+            print "  UDP:  %s:%d > %s:%d" % (inet_ntoa(pkt.src),pkt.udp.sport,inet_ntoa(pkt.dst),pkt.udp.dport)
+        else:
+            print "  unknown proto %d:  %s > %s" % (pkt.p,inet_ntoa(pkt.src),inet_ntoa(pkt.dst))
 
         sys.stdout.flush()
         return 1
