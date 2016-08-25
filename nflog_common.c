@@ -175,7 +175,7 @@ int log_prepare(struct log *self)
 	return 0;
 }
 
-int log_payload_get_nfmark(struct log_payload *self)
+uint32_t log_payload_get_nfmark(struct log_payload *self)
 {
 	return nflog_get_nfmark(self->nfad);
 }

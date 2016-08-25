@@ -21,17 +21,14 @@ enum CfgFlags {
 };
 
 
+%feature("autodoc","1");
+%include docstrings.i
 
 #if defined(SWIGPYTHON)
-
 %include python/nflog_python.i
-
 #elif defined(SWIGPERL)
-
 %include perl/nflog_perl.i
-
 #endif
-
 
 %extend log {
 
@@ -46,21 +43,21 @@ enum CfgFlags {
 
         int open();
         void close();
-        int bind(int);
-        int unbind(int);
-        int create_queue(int);
-        int fast_open(int, int);
-        int set_bufsiz(int);
-        int set_qthresh(uint32_t);
-        int set_timeout(uint32_t);
-        int set_flags(enum CfgFlags);
+        int bind(int family);
+        int unbind(int family);
+        int create_queue(int num);
+        int fast_open(int num, int family);
+        int set_bufsiz(int nlbufsiz);
+        int set_qthresh(uint32_t qthresh);
+        int set_timeout(uint32_t timeout);
+        int set_flags(enum CfgFlags flags);
         int prepare();
         int loop();
         int stop_loop();
 };
 
 %extend log_payload {
-        int get_nfmark();
+        uint32_t get_nfmark();
         struct timeval get_timestamp();
         int get_indev();
         int get_physindev();
