@@ -77,7 +77,7 @@ int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 
 void raise_swig_error(const char *errstr)
 {
-        fprintf(stderr,"ERROR %s\n",errstr);
+        //fprintf(stderr,"ERROR %s\n",errstr);
         SWIG_Error(SWIG_RuntimeError, errstr); 
 }
 %}
