@@ -102,6 +102,19 @@ There are two existing flags (see the `CfgFlags` struct):
 * `CfgSeq`: This enables local nflog sequence numbering.
 * `CfgSeqGlobal`: This enables global nflog sequence numbering."
 
+%feature("docstring") log::set_mode "Set the amount of packet data that nflog copies to userspace
+
+Arguments:
+
+* `mode` - The part of the packet that we are interested in
+* `range` - Size of the packet that we want to get
+
+`mode` can be one of:
+
+* `CopyNone` - do not copy any data
+* `CopyMeta` - copy only packet metadata
+* `CopyPacket` - copy entire packet"
+
 %feature("docstring") log::prepare "Prepare queue before waiting for packets
 
 Run the following preparation steps:

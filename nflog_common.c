@@ -145,6 +145,16 @@ int log_set_flags(struct log *self, enum CfgFlags flags)
 	return ret;
 }
 
+int log_set_mode(struct log *self, enum CopyMode mode, uint32_t range)
+{
+	int ret;
+	ret = nflog_set_mode(self->_gh, mode, range);
+	if (ret < 0) {
+		throw_exception("error during nflog_set_mode()\n");
+	}
+	return ret;
+}
+
 int log_stop_loop(struct log *self)
 {
 	self->fd = -1;

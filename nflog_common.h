@@ -10,6 +10,12 @@ enum CfgFlags {
         CfgSeqGlobal = NFULNL_CFG_F_SEQ_GLOBAL,
 };
 
+enum CopyMode {
+        CopyNone   = NFULNL_COPY_NONE,
+        CopyMeta   = NFULNL_COPY_META,
+        CopyPacket = NFULNL_COPY_PACKET,
+};
+
 extern void raise_swig_error(const char *errstr);
 
 int  swig_nflog_callback(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
@@ -27,6 +33,7 @@ int log_set_bufsiz(struct log *self, int maxlen);
 int log_set_qthresh(struct log *self, uint32_t qthresh);
 int log_set_timeout(struct log *self, uint32_t timeout);
 int log_set_flags(struct log *self, enum CfgFlags flags);
+int log_set_mode(struct log *self, enum CopyMode mode, uint32_t range);
 
 int log_create_queue(struct log *self, int queue_num);
 int log_fast_open(struct log *self, int queue_num, int af_family);

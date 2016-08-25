@@ -20,6 +20,12 @@ enum CfgFlags {
         CfgSeqGlobal,
 };
 
+enum CopyMode {
+        CopyNone,
+        CopyMeta,
+        CopyPacket,
+};
+
 
 %feature("autodoc","1");
 %include docstrings.i
@@ -51,6 +57,7 @@ enum CfgFlags {
         int set_qthresh(uint32_t qthresh);
         int set_timeout(uint32_t timeout);
         int set_flags(enum CfgFlags flags);
+        int set_mode(enum CopyMode mode, uint32_t range);
         int prepare();
         int loop();
         int stop_loop();
